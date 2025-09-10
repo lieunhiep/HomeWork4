@@ -21,7 +21,7 @@ public:
     }
     void displayInfo() {
         cout<<"Bệnh nhân "<< namePatien << " có cuộc hẹn vào ngày: " << date <<", lúc: "<<time<<" với nguyên nhân: "<<reason<<'\n';
-        cout<<"Status: "<<status<<'\n';
+        cout<<"Trạng thái: "<<status<<'\n';
     }
     string getIDDoctor() {
         return IDDoctor;
@@ -214,9 +214,9 @@ int main() {
     cout << "--------------------------\n";
 
     // 4. Đặt lịch hẹn cho bệnh nhân
-    p1.scheduleAppointment("12/09/2025", "09:00", "BS01", "Khám định kỳ", "scheduled");
-    c1.scheduleAppointment("13/09/2025", "10:00", "BS01", "Khám tiểu đường", "scheduled");
-    a1.scheduleAppointment("14/09/2025", "14:00", "BS02", "Khám sốt", "scheduled");
+    p1.scheduleAppointment("12/09/2025", "09:00", "BS01", "Khám định kỳ", "đã lên lịch");
+    c1.scheduleAppointment("13/09/2025", "10:00", "BS01", "Khám tiểu đường", "đã lên lịch");
+    a1.scheduleAppointment("14/09/2025", "14:00", "BS02", "Khám sốt", "đã lên lịch");
     cout << "--------------------------\n";
 
     // 5. Tạo bác sĩ và xem lịch hẹn
@@ -232,11 +232,11 @@ int main() {
 
     // 6. Cập nhật trạng thái lịch hẹn của bác sĩ
     cout << ">>> Bác sĩ 1 cập nhật trạng thái hẹn:\n";
-    d1.updateStatus("completed");  // nhập số thứ tự để chọn hẹn
+    d1.updateStatus("hoàn thành");  // nhập số thứ tự để chọn hẹn
     cout << "--------------------------\n";
 
     cout << ">>> Bác sĩ 2 cập nhật trạng thái hẹn:\n";
-    d2.updateStatus("canceled");   // nhập số thứ tự để chọn hẹn
+    d2.updateStatus("đã huỷ");   // nhập số thứ tự để chọn hẹn
     cout << "--------------------------\n";
 
     return 0;
