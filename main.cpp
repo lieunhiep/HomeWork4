@@ -23,15 +23,19 @@ public:
         cout<<"Bệnh nhân "<< namePatien << " có cuộc hẹn vào ngày: " << date <<", lúc: "<<time<<" với nguyên nhân: "<<reason<<'\n';
         cout<<"Trạng thái: "<<status<<'\n';
     }
+    //hàm trả về ID bác sĩ để duyệt trong mảng
     string getIDDoctor() {
         return IDDoctor;
     }
+    //hàm sửa trạng thái
     void setStatus(string s) {
         status = s;
     }
 };
 //danh sách tổng
 vector<Appointments> appointments;
+
+//BỆNH NHÂN
 
 class Patients {
 protected:
@@ -55,7 +59,7 @@ public:
         medicalHistory = {};
     }
     //hàm in thông tin
-    void displayInfo() {
+    virtual void displayInfo() {
         cout<<"Bệnh nhân: \n";
         cout<<"Tên: "<<name<<'\n';
         cout<<"ID: "<<ID<<'\n';
@@ -95,12 +99,15 @@ public:
     }
 };
 
+//BÁC SĨ
+
 class Doctor {
 private:
     string name;
     string ID;
     string specialty;
     vector<Appointments> apm;
+    //duyệt toàn mảng danh sách tổng để lưu vào danh sách của bác sĩ
     void loadAppointment() {
         apm.clear();
         for(int i=0;i<appointments.size();i++) {
@@ -110,6 +117,7 @@ private:
         }
     }
 public:
+    //hàm khởi tạo
     Doctor(string n, string id, string s)
     {
         name = n;
@@ -117,6 +125,7 @@ public:
         specialty = s;
         loadAppointment();
     }
+    //hàm in lịch hẹn của bác sĩ
     void showAppointments() {
         loadAppointment();
         cout << "Danh sách lịch hẹn của bác sĩ " << name << " (ID: " << ID << "):\n";
@@ -126,16 +135,19 @@ public:
             apm[i].displayInfo();
         }
     }
+    //hàm cập nhật trạng thái cuộc hẹn
     void updateStatus(string status) {
         int order;
+        //nhập số thứ tự của cuộc hẹn mà bác sĩ muốn cập nhật
+        //Nếu ko có số thứ tự đó thì nhập lại
         do {
             cout<<"Bạn muốn cập nhật trạng thái của cuộc hẹn thứ: ";
             cin>>order;
         }
         while(order< 1 || order>apm.size());
-        
+        //cập nhật trạng thái cuộc hẹn trong danh sách của bác sĩ
         apm[order-1].setStatus(status);
-        
+        //cập nhật trạng thái cuộc hẹn trong danh sách tổng
         for (int i = 0; i < appointments.size(); i++) {
             if (appointments[i].getIDDoctor() == ID) {
                 order--;
@@ -146,50 +158,56 @@ public:
             }
         }
         cout << "Đã cập nhật trạng thái cho lịch hẹn thứ: \n";
+        //in lại danh sách các cuộc hẹn của bác sĩ
         showAppointments();
     }
+    //hàm in thông tin bác sĩ
     void displayInfo() {
         cout<<"Bác sĩ: "<<name<<'\n';
         cout<<"ID: "<<ID<<'\n';
         cout<<"CHuyên khoa: "<<specialty<<'\n';
     }
 };
+
+//BỆNH NHÂN MÃNG TÍNH
+
 class ChronicPatient : public Patients {
 private:
 protected:
 public:
+    //hàm khởi tạo
     ChronicPatient(string n, string id, int a, vector<string> mh) :
     Patients(n, id, a, mh) {}
-    
+    //hàm huỷ
     ChronicPatient() :
     Patients("", "", 0, {}) {}
-    
-    void displayIF() {
+    //hàm in thông tin bệnh nhân mãng tính
+    void displayInfo() override {
         cout<<"Bệnh nhân mãng tính: \n";
-        displayInfo();
+        Patients::displayInfo();
     }
-    
 };
+
+//BỆNH NHÂN CẤP TÍNH
 
 class AcutePatient : public Patients {
 private:
     string symptom;
 public:
+    //hàm khởi tạo
     AcutePatient(string n, string id, int a, vector<string> mh, string s)
         : Patients(n, id, a, mh) {
         symptom = s;
     }
-    
+    //hàm huỷ
     AcutePatient() :
     Patients("", "", 0, {}), symptom("") {}
-    
-    void displayIF() {
+    //hàm in thông tin bệnh nhân cấp tính
+    void displayInfo() override {
         cout<<"Bệnh nhân cấp tính: \n";
-        displayInfo();
+        Patients::displayInfo();
         cout<<"Triệu chứng: "<<symptom<<'\n';
     }
-   
-    
 };
 int main() {
     // 1. Tạo bệnh nhân thường
@@ -201,14 +219,14 @@ int main() {
 
     // 2. Tạo bệnh nhân mãn tính
     ChronicPatient c1("Phat", "BN002", 45, {"Tiểu đường"});
-    c1.displayIF();
+    c1.displayInfo();
     c1.updateMH("Huyết áp cao");
     c1.showMH();
     cout << "--------------------------\n";
 
     // 3. Tạo bệnh nhân cấp tính
     AcutePatient a1("Trang", "BN003", 30, {}, "Sốt cao");
-    a1.displayIF();
+    a1.displayInfo();
     a1.updateMH("Viêm họng");
     a1.showMH();
     cout << "--------------------------\n";
